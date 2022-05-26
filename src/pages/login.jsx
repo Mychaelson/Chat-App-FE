@@ -15,10 +15,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsEyeFill, BsEyeSlashFill, BsInfoCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import axiosInstance from "../config/api";
 import user_types from "../redux/type/user";
@@ -29,8 +29,15 @@ const LoginPage = () => {
 
   const toast = useToast();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const authSelector = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (authSelector.id) {
+      navigate("#");
+    }
+  }, [authSelector.id]);
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +53,7 @@ const LoginPage = () => {
         .required("Password is required")
         // the matches is user to ensure the password is strong
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$",
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
     }),
@@ -62,14 +69,14 @@ const LoginPage = () => {
 
         dispatch({
           type: user_types.LOGIN_USER,
-          payload: loginRequest.data.result.checkCredential,
+          payload: loginRequest?.data?.result?.checkCredential,
         });
 
-        Cookies.set("auth_token", loginRequest.data.result.cookie);
+        Cookies.set("auth_token", loginRequest?.data?.result?.cookie);
 
         toast({
           title: "Register Successful!",
-          description: loginRequest.data.message,
+          description: loginRequest?.data?.message,
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -78,8 +85,8 @@ const LoginPage = () => {
       } catch (err) {
         console.log(err);
         toast({
-          title: "Register Failed!",
-          description: err.response.data.message,
+          title: "Login Failed!",
+          description: err?.response?.data?.message,
           status: "error",
           duration: 5000,
           isClosable: true,

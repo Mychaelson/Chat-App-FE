@@ -5,14 +5,17 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+import AuthProvider from "./component/authProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
+      <AuthProvider>
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
+      </AuthProvider>
     </Provider>
   </React.StrictMode>
 );
