@@ -1,9 +1,20 @@
 import { Box, Button, Icon, Text } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
+import user_types from "../redux/type/user";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const authSelector = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  const handleLogoutBtn = () => {
+    dispatch({
+      type: user_types.LOGOUT_USER,
+    });
+    Cookies.remove("auth_token");
+  };
 
   return (
     <Box
@@ -20,7 +31,7 @@ const Navbar = () => {
       >
         <Box mx={8}>
           <Text fontWeight={"bold"} fontSize={"2xl"}>
-            Chat-App
+            Chat-App {authSelector.username}
           </Text>
         </Box>
         <Box mx={8}>
@@ -29,6 +40,7 @@ const Navbar = () => {
               colorScheme={"teal"}
               size="md"
               rightIcon={<Icon as={BiLogOut} />}
+              onClick={handleLogoutBtn}
             >
               Logout
             </Button>

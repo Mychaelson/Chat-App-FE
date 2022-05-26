@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import axiosInstance from "../config/api";
 import user_types from "../redux/type/user";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [showPass, setShowPass] = useState(false);
@@ -63,6 +64,8 @@ const LoginPage = () => {
           type: user_types.LOGIN_USER,
           payload: loginRequest.data.result.checkCredential,
         });
+
+        Cookies.set("auth_token", loginRequest.data.result.cookie);
 
         toast({
           title: "Register Successful!",
