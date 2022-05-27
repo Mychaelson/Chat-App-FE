@@ -35,7 +35,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authSelector.id) {
-      navigate("#");
+      navigate("/");
     }
   }, [authSelector.id]);
 
@@ -53,7 +53,7 @@ const LoginPage = () => {
         .required("Password is required")
         // the matches is user to ensure the password is strong
         .matches(
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$",
+          "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
     }),
@@ -75,7 +75,7 @@ const LoginPage = () => {
         Cookies.set("auth_token", loginRequest?.data?.result?.cookie);
 
         toast({
-          title: "Register Successful!",
+          title: "Login Successful!",
           description: loginRequest?.data?.message,
           status: "success",
           duration: 5000,
